@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
+import { Request, Response } from "express";
 
 cloudinary.config({
   cloud_name: "dvbjipjas",
@@ -7,7 +8,7 @@ cloudinary.config({
   secure: true,
 });
 
-export const uploadPhoto = async (req: any, res: any) => {
+export const uploadPhoto = async (req: Request, res: Response) => {
   //The name field in upload.array(<NAME>,10) in the backend MUST CORRESPOND
   //WITH YOUR FRONTEND data.append(<NAME>,files[i]) name field for it to work
 

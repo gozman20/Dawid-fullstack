@@ -1,6 +1,5 @@
-import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
+dotenv.config();
 import { uploadPhoto } from "../controllers/upload";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
@@ -15,22 +14,23 @@ import { profile } from "../controllers/profile";
 import { register } from "../controllers/register";
 import { login } from "../controllers/login";
 import { corsOption } from "../libs/cors";
-dotenv.config();
+import cors from "cors";
+import express from "express";
 
 const jwtSecret = "chigoziedddd";
-
 export const createToken = (email: string, id: number, name: string) => {
   return jwt.sign({ email: email, id: id, name: name }, jwtSecret, {
     // expiresIn: "60mins",
   });
 };
+
 const app = express();
+app.use(cors(corsOption));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 //path to where the image will be stored
 app.use("../../../frontend/public", express.static("../../../frontend/public"));
-app.use(cors(corsOption));
 
 app.post("/register", register);
 app.post("/login", login);

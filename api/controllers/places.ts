@@ -1,10 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { Response, Request } from "express";
 dotenv.config();
 const jwtSecret = "chigoziedddd";
 const prisma = new PrismaClient();
-export const places = async (req: any, res: any) => {
+
+export const places = async (req: Request, res: Response) => {
   const { refresh_token } = req.cookies;
   if (refresh_token) {
     jwt.verify(refresh_token, jwtSecret, {}, (err, user) => {
@@ -25,8 +27,8 @@ export const places = async (req: any, res: any) => {
     maxGuest,
     price,
     userId,
-  } = await req.body;
-  console.log(req.body);
+  } = req.body;
+
   const place = await prisma.listing.create({
     data: {
       title,
@@ -43,8 +45,8 @@ export const places = async (req: any, res: any) => {
   res.json(place);
 };
 
-export const getPlaceById = async (req: any, res: any) => {
-  const { id } = await req.params;
+export const getPlaceById = async (req: Request, res: Response) => {
+  const { id } = req.params;
   console.log(id);
   const place = await prisma.listing.findUnique({
     where: { id: +id },
@@ -52,7 +54,7 @@ export const getPlaceById = async (req: any, res: any) => {
   res.json(place);
 };
 
-export const getOwnwersPlaces = async (req: any, res: any) => {
+export const getOwnwersPlaces = async (req: Request, res: Response) => {
   const { refresh_token } = req.cookies;
   console.log(req.cookies);
   if (refresh_token) {
@@ -70,7 +72,7 @@ export const getOwnwersPlaces = async (req: any, res: any) => {
   }
 };
 
-export const getAllPlaces = async (req: any, res: any) => {
+export const getAllPlaces = async (_req: Request, res: Response) => {
   const places = await prisma.listing.findMany();
   res.json(places);
 };
